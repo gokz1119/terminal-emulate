@@ -1,7 +1,10 @@
-import { React, useState } from "react";
+import { React, useContext, useState } from "react";
+import { Context } from "../App";
 import { mkdirhandler } from "../CommandHandlers/mkdir";
+import { touchhandler } from "../CommandHandlers/touch";
 
 export default function Input() {
+  const [workingDirectory,setWorkingDirectory]=useContext(Context);//Global state that stores the current working directory
   const [command, setCommand] = useState(""); //State for storing the entire user input
   const [success, setSuccess] = useState(); //State for representing status of firebase api call
   const [valid, setValid] = useState(); //State for representing validity of command
@@ -24,6 +27,11 @@ export default function Input() {
       case "mkdir":
         setValid(true);
         setSuccess(mkdirhandler(commandWords[1]));
+        break;
+
+      case "touch":
+        setValid(true);
+        setSuccess(touchhandler(workingDirectory,commandWords[1]))
         break;
 
       default:
