@@ -4,38 +4,59 @@ import { mkdirhandler } from "../CommandHandlers/mkdir";
 import { touchhandler } from "../CommandHandlers/touch";
 
 export default function Input() {
-  const [workingDirectory,setWorkingDirectory]=useContext(Context);//Global state that stores the current working directory
-  const [command, setCommand] = useState(""); //State for storing the entire user input
+  const [workingDirectory, setWorkingDirectory] = useContext(Context); //Global state that stores the current working directory
+  const [command, setCommand] = useState(null); //State for storing the entire user input
   const [success, setSuccess] = useState(); //State for representing status of firebase api call
   const [valid, setValid] = useState(); //State for representing validity of command
   const [commandComplete, setCommandComplete] = useState(false); //State for representing whether the user input is over
+  const [output, setOutput] = useState(null);
 
-  const handleKeyDown = (e) => { //Function for checking whether enter is pressed
+  const handleKeyDown = (e) => {
+    //Function for checking whether enter is pressed
     if (e.key === "Enter") {
-      e.preventDefault(); 
+      e.preventDefault();
       setCommandComplete(true);
       e.target.disabled = "true"; //To make the input field disabled
       analyzeCommand();
     }
   };
 
-  function analyzeCommand() { //Function to call firebase api
+  function analyzeCommand() {
+    //Function to call firebase api
+    if (!command) {
+      setOutput("Empty");
+      return;
+    }
     const commandWords = command.split(" ");
     console.log(commandWords);
 
     switch (commandWords[0]) {
       case "mkdir":
         setValid(true);
-        setSuccess(mkdirhandler(commandWords[1]));
+        mkdirhandler(commandWords[1])
+          .then((result) => {
+            setSuccess(result.status);
+            setOutput(result.message);
+            console.log(result);
+          })
+          .catch((e) => {
+            setSuccess(false);
+            setOutput("Unable to create directory");
+            console.log("error ", e);
+          });
+
         break;
 
       case "touch":
         setValid(true);
-        setSuccess(touchhandler(workingDirectory,commandWords[1]))
+        setSuccess(touchhandler(workingDirectory, commandWords[1]));
         break;
 
       default:
         setValid(false);
+        const msg = "Command '" + commandWords[0] + "' not found!";
+        setOutput(msg);
+        console.log(output, " and ", msg);
         console.log("Invalid command!");
     }
   }
@@ -55,22 +76,10 @@ export default function Input() {
       </div>
       {commandComplete && (
         <div>
-          <div className="flex justify-start">
-            {valid &&
-              (success ? (
-                <p>Directory created successfully!</p>
-              ) : (
-                <p>
-                  Unable to create directory! Invalid or missing directory name!
-                </p>
-              ))}
+          <div className="flex justify-start">{command && <p>{output}</p>}</div>
 
-            {!valid && <p>Command '{command.split(" ")[0]}' not found!</p>}
-          </div>
-          
-           {/* Recursively calling the Input component to show the prompt after each command is executed */}
-          <Input /> 
-        
+          {/* Recursively calling the Input component to show the prompt after each command is executed */}
+          {output && <Input />}
         </div>
       )}
     </div>

@@ -27,10 +27,10 @@ export function mkdirhandler(f_path) {
   return uploadBytes(storageRef, file)
     .then((snapshot) => {
       console.log("Uploaded a blob or file!");
-      return true;
+      return { status: true, message: "Directory created successfully!" };
     })
     .catch((err) => {
       console.log(err);
-      return false;
+      return { status: false, message: "Unable to create the directory" };
     });
 }
