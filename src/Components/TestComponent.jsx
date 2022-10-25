@@ -3,6 +3,7 @@ import { mkdirhandler } from '../CommandHandlers/mkdir'
 import {touchhandler} from '../CommandHandlers/touch'
 import { TestButton } from './TestButton'
 import { Context } from '../App'
+import { checkDir } from '../CommandHandlers/checkDir'
 
 export const TestComponent = () => {
 const [workingDirectory,setWorkingDirectory]=useContext(Context)
@@ -12,6 +13,7 @@ const [workingDirectory,setWorkingDirectory]=useContext(Context)
         <TestButton func={mkdirhandler} txt="mkdir handler"/>
         <TestButton func={touchhandler} txt="touch handler"/>
         <TestButton  txt={workingDirectory}/>
+        <TestButton txt="check directory" func={checkDir}/>
     </div>
   )
 }
