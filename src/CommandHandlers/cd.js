@@ -8,8 +8,8 @@ export function cdhandler(dir, workingDirectory) {
   return checkDir(dir, workingDirectory)
     .then((result) => {
       console.log({ result });
-      if (result) return { status:true, message: "Directory exists" };
-      else return { status:false, message: "Directory doesn't exist" };
+      if (result) return { status:true, message: "Directory changed!" };
+      else return { status:false, message: "Directory doesn't exist!" };
     })
     .catch((e) => {
       return { status:false, message: "Unable to get directory details!" };
