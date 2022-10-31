@@ -98,9 +98,7 @@ export default function Input() {
           .then((result) => {
             setSuccess(result.status);
             let message = "";
-            result.contents.forEach((item) => {
-              message = message + item + "\n";
-            });
+            result.contents.forEach((item) => (message += item + "\n"));
             setOutput(message);
           })
           .catch((err) => {
@@ -109,9 +107,16 @@ export default function Input() {
           });
         break;
 
+      case "echo":
+        setValid(true);
+        setSuccess(true);
+        setOutput(commandWords.slice(1, commandWords.length).join(" "));
+        break;
+
       case "touch":
         setValid(true);
         setSuccess(touchhandler(workingDirectory, commandWords[1]));
+        setOutput(`File ${commandWords[1]} created!`);
         break;
 
       default:
