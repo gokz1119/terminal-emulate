@@ -51,10 +51,22 @@ export default function Input() {
 
       case "cd":
         setValid(true);
-        const result = cdhandler(commandWords[1]);
-        setSuccess(result.status);
-        setOutput(result.message);
+        cdhandler(commandWords[1]).then((result) => {
+          console.log(result);
+          setSuccess(result.status);
+          setOutput(result.message);
+        }).catch((e) => {
+          console.log(e);
+          setSuccess(false);
+          setOutput("Unable to get directory details");
+        });
         break;
+
+        case "pwd":
+          setValid(true);
+          setOutput(workingDirectory);
+          setSuccess(true);
+          break;
 
       case "ls":
         setValid(true);
