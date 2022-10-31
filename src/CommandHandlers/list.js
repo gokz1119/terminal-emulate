@@ -1,8 +1,8 @@
 import { getStorage, ref, listAll } from "firebase/storage";
 const storage = getStorage();
-const listRef = ref(storage, "Countries");
 
-export function listhandler() {
+export function listhandler(workingDirectory) {
+  const listRef = ref(storage, workingDirectory);
   let contents = [];
   return listAll(listRef)
     .then((res) => {

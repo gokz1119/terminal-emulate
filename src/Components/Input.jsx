@@ -35,7 +35,7 @@ export default function Input() {
     switch (commandWords[0]) {
       case "mkdir":
         setValid(true);
-        mkdirhandler(commandWords[1])
+        mkdirhandler(commandWords[1], workingDirectory)
           .then((result) => {
             setSuccess(result.status);
             setOutput(result.message);
@@ -51,14 +51,33 @@ export default function Input() {
 
       case "cd":
         setValid(true);
-        const result = cdhandler(commandWords[1]);
-        setSuccess(result.status);
-        setOutput(result.message);
+        cdhandler(commandWords[1], workingDirectory).then((result) => {
+          console.log(result);
+          setSuccess(result.status);
+          setOutput(result.message);
+          if (result.status){
+            let dir = workingDirectory + "/" + commandWords[1];
+            setWorkingDirectory(dir);
+          }
+        }).catch((e) => {
+          console.log(e);
+          setSuccess(false);
+          setOutput("Unable to get directory details");
+        });
         break;
+
+        case "pwd":
+          setValid(true);
+          if(workingDirectory !== "")
+            setOutput(workingDirectory);
+          else 
+            setOutput("/");
+          setSuccess(true);
+          break;
 
       case "ls":
         setValid(true);
-        listhandler()
+        listhandler(workingDirectory)
           .then((result) => {
             setSuccess(result.status);
             let message = "";

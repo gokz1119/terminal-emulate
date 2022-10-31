@@ -5,11 +5,11 @@ import { TestComponent } from "./Components/TestComponent";
 
 export const Context = React.createContext();
 function App() {
-  const [workingDirectory, setWorkingDirectory] = useState("User/");
+  const [workingDirectory, setWorkingDirectory] = useState("");
   return (
     <Context.Provider value={[workingDirectory, setWorkingDirectory]}>
       <div className="App">
-        <Input />
+        <Input workDir={""} />
         <TestComponent />
       </div>
     </Context.Provider>
