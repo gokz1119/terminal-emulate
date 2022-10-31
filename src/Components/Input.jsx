@@ -51,29 +51,29 @@ export default function Input() {
 
       case "cd":
         setValid(true);
-        cdhandler(commandWords[1], workingDirectory).then((result) => {
-          console.log(result);
-          setSuccess(result.status);
-          setOutput(result.message);
-          if (result.status){
-            let dir = workingDirectory + "/" + commandWords[1];
-            setWorkingDirectory(dir);
-          }
-        }).catch((e) => {
-          console.log(e);
-          setSuccess(false);
-          setOutput("Unable to get directory details");
-        });
+        cdhandler(commandWords[1], workingDirectory)
+          .then((result) => {
+            console.log(result);
+            setSuccess(result.status);
+            setOutput(result.message);
+            if (result.status) {
+              let dir = workingDirectory + "/" + commandWords[1];
+              setWorkingDirectory(dir);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            setSuccess(false);
+            setOutput("Unable to get directory details");
+          });
         break;
 
-        case "pwd":
-          setValid(true);
-          if(workingDirectory !== "")
-            setOutput(workingDirectory);
-          else 
-            setOutput("/");
-          setSuccess(true);
-          break;
+      case "pwd":
+        setValid(true);
+        if (workingDirectory !== "") setOutput(workingDirectory);
+        else setOutput("/");
+        setSuccess(true);
+        break;
 
       case "ls":
         setValid(true);
@@ -106,22 +106,28 @@ export default function Input() {
     }
   }
   return (
-    <div className="text-white w-full h-full font-mono selection:bg-green-600">
-      <div className="flex">
-        <p className="text-green-600 selection:bg-white text-start">
+    <div className='text-white w-full h-full font-mono selection:bg-green-600'>
+      <div className='flex'>
+        <p className='text-green-600 selection:bg-white text-start'>
           terminal_to_cloud:~$
         </p>
         <input
-          className="bg-black ml-2 border-0 caret-green-600 stroke-2 focus:outline-none flex-grow"
+          className='bg-black ml-2 border-0 caret-green-600 stroke-2 focus:outline-none flex-grow'
           autoFocus
-          spellCheck="false"
+          spellCheck='false'
           onChange={(e) => setCommand(e.target.value)}
           onKeyDown={(e) => handleKeyDown(e)}
         />
       </div>
       {commandComplete && (
         <div>
-          <div className="flex justify-start">{command && <p>{output}</p>}</div>
+          <div className='flex justify-start'>
+            {command && (
+              <p className='text-start' style={{ whiteSpace: "pre-line" }}>
+                {output}
+              </p>
+            )}
+          </div>
 
           {/* Recursively calling the Input component to show the prompt after each command is executed */}
           {output && <Input />}
