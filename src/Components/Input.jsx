@@ -4,6 +4,7 @@ import { mkdirhandler } from "../CommandHandlers/mkdir";
 import { cdhandler } from "../CommandHandlers/cd";
 import { touchhandler } from "../CommandHandlers/touch";
 import { listhandler } from "../CommandHandlers/list";
+import { rmhandler } from "../CommandHandlers/rm";
 
 export default function Input() {
   const [workingDirectory, setWorkingDirectory] = useContext(Context); //Global state that stores the current working directory
@@ -64,8 +65,24 @@ export default function Input() {
           .catch((e) => {
             console.log(e);
             setSuccess(false);
-            setOutput("Unable to get directory details");
+            setOutput("Unable to get directory details!");
           });
+        break;
+
+      case "rm":
+        setValid(true);
+        rmhandler(commandWords[1], workingDirectory)
+          .then((result) => {
+            setSuccess(result.status);
+            setOutput(result.message);
+            console.log(result);
+          })
+          .catch((e) => {
+            setSuccess(false);
+            setOutput("Uh oh! Unable to delete file");
+            console.log("error ", e);
+          });
+
         break;
 
       case "pwd":
