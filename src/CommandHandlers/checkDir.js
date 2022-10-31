@@ -1,8 +1,8 @@
 import { getStorage, ref, listAll } from "firebase/storage";
 
-export function checkDir(dir) {
+export function checkDir(dir, workingDirectory) {
   const storage = getStorage();
-  const listRef = ref(storage, "");
+  const listRef = ref(storage, workingDirectory);
   return listAll(listRef)
     .then((res) => {
       let dirExists = false;

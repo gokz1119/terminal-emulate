@@ -2,9 +2,10 @@ import { db } from "../firebase-config";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { checkDir } from "./checkDir";
 
-export function cdhandler(f_path) {
+export function cdhandler(dir, workingDirectory) {
   // const storage = getStorage();
-  return checkDir(f_path)
+
+  return checkDir(dir, workingDirectory)
     .then((result) => {
       console.log({ result });
       if (result) return { status:true, message: "Directory exists" };

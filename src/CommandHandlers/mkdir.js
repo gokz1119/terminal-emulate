@@ -1,11 +1,11 @@
 import { db } from "../firebase-config";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
-export function mkdirhandler(f_path) {
+export function mkdirhandler(f_path, workingDirectory) {
   const storage = getStorage();
 
   //path to file (DOESN'T INCLUDE FILE ITSELF)
-  const pathtofile = f_path;
+  const pathtofile = workingDirectory + '/' + f_path;
   // const pathtofile = "Countries/states/city/";
 
   //name of the file to be created
