@@ -3,6 +3,7 @@ import { Context } from "../App";
 import { mkdirhandler } from "../CommandHandlers/mkdir";
 import { cdhandler } from "../CommandHandlers/cd";
 import { touchhandler } from "../CommandHandlers/touch";
+import { listhandler } from "../CommandHandlers/list";
 
 export default function Input() {
   const [workingDirectory, setWorkingDirectory] = useContext(Context); //Global state that stores the current working directory
@@ -47,14 +48,31 @@ export default function Input() {
           });
 
         break;
-      
+
       case "cd":
         setValid(true);
         const result = cdhandler(commandWords[1]);
         setSuccess(result.status);
         setOutput(result.message);
         break;
-        
+
+      case "ls":
+        setValid(true);
+        listhandler()
+          .then((result) => {
+            setSuccess(result.status);
+            let message = "";
+            result.contents.forEach((item) => {
+              message = message + item + "\n";
+            });
+            setOutput(message);
+          })
+          .catch((err) => {
+            setSuccess(false);
+            setOutput("Unable to get folder information");
+          });
+        break;
+
       case "touch":
         setValid(true);
         setSuccess(touchhandler(workingDirectory, commandWords[1]));
